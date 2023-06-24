@@ -18,7 +18,25 @@ namespace FileManager
 
         public void Add(Base @base)
         {
+            int id = 1;
+            if (myPc.Count > 0)
+            {
+                id = myPc[myPc.Count - 1].Id + 1;
+            }
+            @base.Id = id;
             myPc.Add(@base);
+        }
+
+        public void Edit(Base @base)
+        {
+            var item = myPc.FirstOrDefault(x => x.Id == @base.Id);
+            if (item != null)
+            {
+                if (item is Folder folder)
+                {
+                    folder.Name = @base.Name;
+                }
+            }
         }
 
         public bool ReadFile(string path)
@@ -38,6 +56,11 @@ namespace FileManager
                 MessageBoxFarsi.Show(ex.Message, "خطا", MessageBoxFarsiButtons.OK, MessageBoxFarsiIcon.Error);
                 return false;
             }
+        }
+
+        public string GetPcName()
+        {
+            return myPc[0].Name;
         }
 
         public bool WriteFile(string path)
@@ -63,9 +86,75 @@ namespace FileManager
             }
         }
 
-        public List<Base> GetDrives()
+        public List<Drive> GetDrives()
         {
-            return myPc.Where(x => x.GetFatherId() == 1).ToList();
+            var drives = new List<Drive>();
+            foreach (var item in myPc)
+            {
+                if (item is Drive)
+                {
+                    drives.Add(item as Drive);
+                }
+            }
+            return drives;
+        }
+
+        public long GetHardFreeSpace()
+        {
+            long freeSpace = (myPc[0] as Pc).Size;
+            var drives = GetDrives();
+            return freeSpace - drives.Sum(x => x.Size);
+        }
+
+        public bool CheckExistDriveLabel(string label)
+        {
+            foreach (var item in myPc)
+            {
+                if (item is Drive drive)
+                {
+                    if (drive.Label == label)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public List<Base> GetFileAndFolders(int fatherId)
+        {
+            var result = new List<Base>();
+            foreach (var item in myPc)
+            {
+                if ((item is Folder folder && folder.FatherId == fatherId) || 
+                    (item is Models.File file && file.FatherId == fatherId))
+                {
+                    result.Add(item);
+                }
+            }
+            return result;
+        }
+
+        public bool CheckExistFolderOrFile(int fatherId, string name)
+        {
+            foreach (var item in GetFileAndFolders(fatherId))
+            {
+                if (item is Folder folder)
+                {
+                    if (folder.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+                else if (item is Models.File file)
+                {
+                    if (file.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

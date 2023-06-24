@@ -7,15 +7,6 @@ namespace FileManager.Models
     {
         public int FatherId { get; set; }
         public long Size { get; set; }
-
-        public override int GetFatherId()
-        {
-            return FatherId;
-        }
-
-        public override long GetSize()
-        {
-            return Size;
-        }
+        public string SystemPath { get; set; }
     }
 }

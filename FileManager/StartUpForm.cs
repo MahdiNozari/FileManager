@@ -29,7 +29,7 @@ namespace FileManager
             if (string.IsNullOrWhiteSpace(TxtFileName.Text))
             {
                 TxtFileName.Focus();
-                MessageBoxFarsi.Show("", "پیغام", MessageBoxFarsiButtons.OK, MessageBoxFarsiIcon.Information);
+                MessageBoxFarsi.Show("نام فایل را وارد کنید", "پیغام", MessageBoxFarsiButtons.OK, MessageBoxFarsiIcon.Information);
             }
             else
             {
@@ -53,7 +53,6 @@ namespace FileManager
                 Manager manager = new Manager();
                 manager.Add(new Pc
                 {
-                    Id = 1,
                     Name = TxtFileName.Text.Trim(),
                     Size = Convert.ToInt64(TxtFileSize.Value)
                 });

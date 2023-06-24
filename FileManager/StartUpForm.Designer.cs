@@ -48,7 +48,7 @@
             this.BtnCreate.Location = new System.Drawing.Point(277, 172);
             this.BtnCreate.Name = "BtnCreate";
             this.BtnCreate.Size = new System.Drawing.Size(125, 49);
-            this.BtnCreate.TabIndex = 0;
+            this.BtnCreate.TabIndex = 4;
             this.BtnCreate.Text = "ایجاد فایل جدید";
             this.BtnCreate.UseVisualStyleBackColor = true;
             this.BtnCreate.Click += new System.EventHandler(this.BtnCreate_Click);
@@ -59,7 +59,7 @@
             this.label1.Name = "label1";
             this.label1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label1.Size = new System.Drawing.Size(390, 37);
-            this.label1.TabIndex = 2;
+            this.label1.TabIndex = 0;
             this.label1.Text = "نام فایل : ";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 

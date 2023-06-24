@@ -49,6 +49,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DriveInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DriveInfoForm.Designer.cs">
+      <DependentUpon>DriveInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FolderInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FolderInfoForm.Designer.cs">
+      <DependentUpon>FolderInfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,6 +81,12 @@
     <Compile Include="StartUpForm.Designer.cs">
       <DependentUpon>StartUpForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="DriveInfoForm.resx">
+      <DependentUpon>DriveInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FolderInfoForm.resx">
+      <DependentUpon>FolderInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
