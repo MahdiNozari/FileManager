@@ -33,14 +33,14 @@ namespace FileManager
             if (string.IsNullOrWhiteSpace(TxtName.Text))
             {
                 TxtName.Focus();
-                MessageBoxFarsi.Show("", "پیغام", MessageBoxFarsiButtons.OK, MessageBoxFarsiIcon.Information);
+                MessageBoxFarsi.Show("نام پوشه نمی تواند خالی باشد", "پیغام", MessageBoxFarsiButtons.OK, MessageBoxFarsiIcon.Information);
             }
             else
             {
                 if (_manager.CheckExistFolderOrFile(_fatherId, TxtName.Text.Trim()))
                 {
                     TxtName.Focus();
-                    MessageBoxFarsi.Show("", "پیغام", MessageBoxFarsiButtons.OK, MessageBoxFarsiIcon.Information);
+                    MessageBoxFarsi.Show("این نام قبلا در این مسیر ثبت شده است", "پیغام", MessageBoxFarsiButtons.OK, MessageBoxFarsiIcon.Information);
                 }
                 else
                 {

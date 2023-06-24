@@ -16,7 +16,7 @@ namespace FileManager
             myPc = new List<Base>();
         }
 
-        public void Add(Base @base)
+        public int Add(Base @base)
         {
             int id = 1;
             if (myPc.Count > 0)
@@ -25,6 +25,7 @@ namespace FileManager
             }
             @base.Id = id;
             myPc.Add(@base);
+            return id;
         }
 
         public void Edit(Base @base)
@@ -63,6 +64,11 @@ namespace FileManager
             return myPc[0].Name;
         }
 
+        public Base GetById(int id)
+        {
+            return myPc.FirstOrDefault(x => x.Id == id);
+        }
+
         public bool WriteFile(string path)
         {
             try
@@ -79,7 +85,7 @@ namespace FileManager
                 }
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBoxFarsi.Show(ex.Message, "خطا", MessageBoxFarsiButtons.OK, MessageBoxFarsiIcon.Error);
                 return false;
@@ -126,7 +132,7 @@ namespace FileManager
             var result = new List<Base>();
             foreach (var item in myPc)
             {
-                if ((item is Folder folder && folder.FatherId == fatherId) || 
+                if ((item is Folder folder && folder.FatherId == fatherId) ||
                     (item is Models.File file && file.FatherId == fatherId))
                 {
                     result.Add(item);
@@ -155,6 +161,208 @@ namespace FileManager
                 }
             }
             return false;
+        }
+
+        public long GetFolderSize(int id)
+        {
+            long sum = 0;
+            foreach (var item in GetFileAndFolders(id))
+            {
+                if (item is Models.File file)
+                {
+                    sum += file.Size;
+                }
+                else if (item is Folder folder)
+                {
+                    sum += GetFolderSize(folder.Id);
+                }
+            }
+            return sum;
+        }
+
+        public long GetDriveFreeSpace(int id)
+        {
+            var item = myPc.FirstOrDefault(x => x.Id == id);
+            if (item is null)
+            {
+                return 0;
+            }
+            else if (item is Folder folder)
+            {
+                return GetDriveFreeSpace(folder.FatherId);
+            }
+            else if (item is Drive drive)
+            {
+                return drive.Size - GetFolderSize(drive.Id);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public bool Copy(int fromId, int toId)
+        {
+            var fromLocation = myPc.FirstOrDefault(x => x.Id == fromId);
+            var toLocation = myPc.FirstOrDefault(x => x.Id == toId);
+            if (fromLocation is null || toLocation is null)
+            {
+                return false;
+            }
+            long toLocationFreeSpace = GetDriveFreeSpace(toLocation.Id);
+            if (fromLocation is Folder folder)
+            {
+                long folderSize = GetFolderSize(folder.Id);
+                if (folderSize > toLocationFreeSpace)
+                {
+                    return false;
+                }
+
+                string newName = folder.Name;
+                int counter = 1;
+
+                while (CheckExistFolderOrFile(toId, newName))
+                {
+                    newName = $"{newName}({counter})";
+                    counter++;
+                }
+
+                Folder newFolder = new Folder()
+                {
+                    FatherId = toId,
+                    Name = newName
+                };
+
+                newFolder.Id = Add(newFolder);
+
+                foreach (var item in GetFileAndFolders(folder.Id))
+                {
+                    Copy(item.Id, newFolder.Id);
+                }
+
+                return true;
+            }
+            else if (fromLocation is Models.File file)
+            {
+                if (file.Size > toLocationFreeSpace)
+                {
+                    return false;
+                }
+
+                string newName = file.Name;
+                int counter = 1;
+
+                while (CheckExistFolderOrFile(toId, newName))
+                {
+                    int index = newName.LastIndexOf('.');
+                    if (index == -1)
+                        newName = $"{newName}({counter})";
+                    else
+                        newName = $"{newName}({counter}){Path.GetExtension(newName)}";
+                    counter++;
+                }
+
+                Models.File newFile = new Models.File()
+                {
+                    FatherId = toLocation.Id,
+                    Name = newName,
+                    Size = file.Size,
+                    SystemPath = file.SystemPath
+                };
+                Add(newFile);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool Cut(int fromId, int toId)
+        {
+            var fromLocation = myPc.FirstOrDefault(x => x.Id == fromId);
+            var toLocation = myPc.FirstOrDefault(x => x.Id == toId);
+            if (fromLocation is null || toLocation is null)
+            {
+                return false;
+            }
+            long toLocationFreeSpace = GetDriveFreeSpace(toLocation.Id);
+            if (fromLocation is Folder folder)
+            {
+                long folderSize = GetFolderSize(folder.Id);
+                if (folderSize > toLocationFreeSpace)
+                {
+                    return false;
+                }
+
+                string newName = folder.Name;
+                int counter = 1;
+
+                while (CheckExistFolderOrFile(toId, newName))
+                {
+                    newName = $"{newName}({counter})";
+                    counter++;
+                }
+
+                folder.Name = newName;
+                folder.FatherId = toId;
+                return true;
+            }
+            else if (fromLocation is Models.File file)
+            {
+                if (file.Size > toLocationFreeSpace)
+                {
+                    return false;
+                }
+
+                string newName = file.Name;
+                int counter = 1;
+
+                while (CheckExistFolderOrFile(toId, newName))
+                {
+                    int index = newName.LastIndexOf('.');
+                    if (index == -1)
+                        newName = $"{newName}({counter})";
+                    else
+                        newName = $"{newName}({counter}){Path.GetExtension(newName)}";
+                    counter++;
+                }
+
+                file.FatherId = toId;
+                file.Name = newName;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            var deleteItem = myPc.FirstOrDefault(x => x.Id == id);
+            if (deleteItem is null)
+            {
+                return;
+            }
+            if (deleteItem is Folder folder)
+            {
+                foreach (var item in GetFileAndFolders(folder.Id))
+                {
+                    Delete(item.Id);
+                }
+            }
+            else if (deleteItem is Drive drive)
+            {
+                foreach (var item in GetFileAndFolders(drive.Id))
+                {
+                    Delete(item.Id);
+                }
+            }
+            else if (deleteItem is Models.File file)
+            {
+                myPc.RemoveAll(x => x.Id == file.Id);
+            }
         }
     }
 }
