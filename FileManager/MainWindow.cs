@@ -2,19 +2,20 @@
 using FileManager.Models;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Windows.Forms;
 
 namespace FileManager
 {
     public partial class MainWindow : Form
     {
-        private readonly Manager _manager;
+        private Manager _manager;
         private string CurrentPath;
         private string Path;
-        private readonly List<int> PathSaver;
+        private List<int> PathSaver;
         private int CopyFrom = 0;
         private int CutFrom = 0;
-        
+
         public MainWindow()
         {
             InitializeComponent();
@@ -116,7 +117,7 @@ namespace FileManager
 
         private void BtnNewDrive_Click(object sender, EventArgs e)
         {
-            if(new DriveInfoForm(_manager).ShowDialog() == DialogResult.OK)
+            if (new DriveInfoForm(_manager).ShowDialog() == DialogResult.OK)
             {
                 LoadDrives();
             }
@@ -150,6 +151,14 @@ namespace FileManager
                 CurrentPath += $"\\{folder.Name}";
                 LoadDirectoryAndFiles(folder.Id);
             }
+            else if (item is File file)
+            {
+                string filePath = $"{Application.StartupPath}\\Files\\{file.SystemPath}";
+                if (!System.IO.File.Exists(filePath))
+                    MessageBoxFarsi.Show("فایل یافت نشد", "خطا", MessageBoxFarsiButtons.OK, MessageBoxFarsiIcon.Error);
+                else
+                    System.Diagnostics.Process.Start(filePath);
+            }
         }
 
         private void BtnNewFolder_Click(object sender, EventArgs e)
@@ -175,6 +184,13 @@ namespace FileManager
             if (item is Folder folder)
             {
                 if (new FolderInfoForm(_manager, PathSaver[PathSaver.Count - 1], folder).ShowDialog() == DialogResult.OK)
+                {
+                    LoadDirectoryAndFiles(PathSaver[PathSaver.Count - 1]);
+                }
+            }
+            else if (item is File file)
+            {
+                if (new FileInfoForm(_manager, file).ShowDialog() == DialogResult.OK)
                 {
                     LoadDirectoryAndFiles(PathSaver[PathSaver.Count - 1]);
                 }
@@ -224,7 +240,7 @@ namespace FileManager
                         System.IO.Directory.CreateDirectory($"{Application.StartupPath}\\Files");
                     System.IO.File.Copy(open.FileName, $"{Application.StartupPath}\\Files\\{path}");
                     MessageBoxFarsi.Show("فایل با موفقیت کپی شد", "پیغام", MessageBoxFarsiButtons.OK, MessageBoxFarsiIcon.Information);
-                    LoadDirectoryAndFiles(PathSaver[PathSaver.Count - 1]); 
+                    LoadDirectoryAndFiles(PathSaver[PathSaver.Count - 1]);
                 }
                 else
                 {
@@ -391,6 +407,93 @@ namespace FileManager
                     _manager.Delete(drive.Id);
                     LoadDrives();
                 }
+            }
+        }
+
+        private void BtnNewDataFile_Click(object sender, EventArgs e)
+        {
+            if (MessageBoxFarsi.Show("با ساخت فایل ساختار جدید فایل کنونی بسته خواهد شد ادامه می دهید؟", "پیغام", MessageBoxFarsiButtons.YesNo, MessageBoxFarsiIcon.Information) == DialogResult.Yes)
+            {
+                StartUpForm form = new StartUpForm
+                {
+                    IsDefaultFile = false
+                };
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    _manager.WriteFile(Path);
+                    Path = form.Path;
+                    _manager = new Manager();
+                    _manager.ReadFile(Path);
+                    CopyFrom = CutFrom = 0;
+                    PathSaver = new List<int>();
+                    CurrentPath = $"This Pc({_manager.GetPcName()})";
+                    PathSaver.Add(1);
+                    LoadDrives();
+                }
+            }
+        }
+
+        private void BtnOpenFileData_Click(object sender, EventArgs e)
+        {
+            if (MessageBoxFarsi.Show("با ساخت فایل ساختار جدید فایل کنونی بسته خواهد شد ادامه می دهید؟", "پیغام", MessageBoxFarsiButtons.YesNo, MessageBoxFarsiIcon.Information) == DialogResult.Yes)
+            {
+                OpenFileDialog open = new OpenFileDialog
+                {
+                    Filter = "Manager File|*.dsfs"
+                };
+                if (open.ShowDialog() == DialogResult.OK)
+                {
+                    _manager.WriteFile(Path);
+                    Manager tempManager = new Manager();
+                    if (tempManager.ReadFile(open.FileName))
+                    {
+                        _manager = new Manager();
+                        _manager = tempManager;
+                        Path = open.FileName;
+                        CopyFrom = CutFrom = 0;
+                        PathSaver = new List<int>();
+                        CurrentPath = $"This Pc({_manager.GetPcName()})";
+                        PathSaver.Add(1);
+                        LoadDrives();
+                    }
+                }
+            }
+        }
+
+        private void ListDirectoryAndFiles_Click(object sender, EventArgs e)
+        {
+            if (ListDirectoryAndFiles.SelectedItems.Count == 0)
+            {
+                return;
+            }
+            var item = ListDirectoryAndFiles.SelectedItems[0].Tag;
+            if (item is null)
+            {
+                return;
+            }
+            if (item is Drive drive)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"نام درایو : {drive.Name} ({drive.Label})");
+                sb.AppendLine($"فضای درایو : {drive.Size}");
+                long freeSpace = _manager.GetDriveFreeSpace(drive.Id);
+                sb.AppendLine($"فضای خالی : {freeSpace}");
+                sb.AppendLine($"فضای پرشده : {drive.Size - freeSpace}");
+                TxtInfo.Text = sb.ToString();
+            }
+            else if (item is Folder folder)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"نام پوشه : {folder.Name}");
+                sb.AppendLine($"سایز پوشه : {_manager.GetFolderSize(folder.Id)}");
+                TxtInfo.Text = sb.ToString();
+            }
+            else if (item is File file)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"نام فایل : {file.Name}");
+                sb.AppendLine($"سایز فایل : {file.Size}");
+                TxtInfo.Text = sb.ToString();
             }
         }
     }

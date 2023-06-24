@@ -113,6 +113,16 @@ namespace FileManager.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_data_recovery_50px_1 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_data_recovery_50px_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_Delete_50px {
             get {
                 object obj = ResourceManager.GetObject("icons8_Delete_50px", resourceCulture);
@@ -156,6 +166,16 @@ namespace FileManager.Properties {
         internal static System.Drawing.Bitmap icons8_Paste_50px_1 {
             get {
                 object obj = ResourceManager.GetObject("icons8_Paste_50px_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_ssd_50px {
+            get {
+                object obj = ResourceManager.GetObject("icons8_ssd_50px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

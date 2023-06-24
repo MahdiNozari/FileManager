@@ -42,6 +42,8 @@
             this.BtnNewFolder = new System.Windows.Forms.Button();
             this.BtnCopyFileFromComputer = new System.Windows.Forms.Button();
             this.BtnNewDrive = new System.Windows.Forms.Button();
+            this.BtnNewDataFile = new System.Windows.Forms.Button();
+            this.BtnOpenFileData = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.ListDirectoryAndFiles = new System.Windows.Forms.ListView();
@@ -100,6 +102,8 @@
             this.flowLayoutPanel1.Controls.Add(this.BtnNewFolder);
             this.flowLayoutPanel1.Controls.Add(this.BtnCopyFileFromComputer);
             this.flowLayoutPanel1.Controls.Add(this.BtnNewDrive);
+            this.flowLayoutPanel1.Controls.Add(this.BtnNewDataFile);
+            this.flowLayoutPanel1.Controls.Add(this.BtnOpenFileData);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -215,6 +219,34 @@
             this.BtnNewDrive.UseVisualStyleBackColor = true;
             this.BtnNewDrive.Click += new System.EventHandler(this.BtnNewDrive_Click);
             // 
+            // BtnNewDataFile
+            // 
+            this.BtnNewDataFile.Font = new System.Drawing.Font("B Nazanin", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnNewDataFile.Image = global::FileManager.Properties.Resources.icons8_data_recovery_50px_1;
+            this.BtnNewDataFile.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.BtnNewDataFile.Location = new System.Drawing.Point(608, 8);
+            this.BtnNewDataFile.Name = "BtnNewDataFile";
+            this.BtnNewDataFile.Size = new System.Drawing.Size(69, 87);
+            this.BtnNewDataFile.TabIndex = 14;
+            this.BtnNewDataFile.Text = "ساختار جدید";
+            this.BtnNewDataFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnNewDataFile.UseVisualStyleBackColor = true;
+            this.BtnNewDataFile.Click += new System.EventHandler(this.BtnNewDataFile_Click);
+            // 
+            // BtnOpenFileData
+            // 
+            this.BtnOpenFileData.Font = new System.Drawing.Font("B Nazanin", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnOpenFileData.Image = global::FileManager.Properties.Resources.icons8_ssd_50px;
+            this.BtnOpenFileData.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.BtnOpenFileData.Location = new System.Drawing.Point(683, 8);
+            this.BtnOpenFileData.Name = "BtnOpenFileData";
+            this.BtnOpenFileData.Size = new System.Drawing.Size(107, 87);
+            this.BtnOpenFileData.TabIndex = 14;
+            this.BtnOpenFileData.Text = "باز کردن ساختار";
+            this.BtnOpenFileData.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnOpenFileData.UseVisualStyleBackColor = true;
+            this.BtnOpenFileData.Click += new System.EventHandler(this.BtnOpenFileData_Click);
+            // 
             // imageList1
             // 
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
@@ -244,6 +276,7 @@
             this.ListDirectoryAndFiles.SmallImageList = this.imageList1;
             this.ListDirectoryAndFiles.TabIndex = 2;
             this.ListDirectoryAndFiles.UseCompatibleStateImageBehavior = false;
+            this.ListDirectoryAndFiles.Click += new System.EventHandler(this.ListDirectoryAndFiles_Click);
             this.ListDirectoryAndFiles.DoubleClick += new System.EventHandler(this.ListDirectoryAndFiles_DoubleClick);
             // 
             // TxtInfo
@@ -299,5 +332,7 @@
         private System.Windows.Forms.Button BtnCopyFileFromComputer;
         private System.Windows.Forms.Button BtnNewDrive;
         private System.Windows.Forms.Button BtnPaste;
+        private System.Windows.Forms.Button BtnNewDataFile;
+        private System.Windows.Forms.Button BtnOpenFileData;
     }
 }

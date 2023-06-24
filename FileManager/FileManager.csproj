@@ -55,6 +55,12 @@
     <Compile Include="DriveInfoForm.Designer.cs">
       <DependentUpon>DriveInfoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileInfoForm.Designer.cs">
+      <DependentUpon>FileInfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FolderInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +89,9 @@
     </Compile>
     <EmbeddedResource Include="DriveInfoForm.resx">
       <DependentUpon>DriveInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileInfoForm.resx">
+      <DependentUpon>FileInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FolderInfoForm.resx">
       <DependentUpon>FolderInfoForm.cs</DependentUpon>
@@ -146,6 +155,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8_Paste_50px_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8_data_recovery_50px_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8_ssd_50px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

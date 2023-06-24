@@ -37,6 +37,10 @@ namespace FileManager
                 {
                     folder.Name = @base.Name;
                 }
+                else if (item is Models.File file)
+                {
+                    file.Name = @base.Name;
+                }
             }
         }
 
@@ -351,6 +355,7 @@ namespace FileManager
                 {
                     Delete(item.Id);
                 }
+                myPc.RemoveAll(x => x.Id == folder.Id);
             }
             else if (deleteItem is Drive drive)
             {
@@ -358,6 +363,7 @@ namespace FileManager
                 {
                     Delete(item.Id);
                 }
+                myPc.RemoveAll(x => x.Id == drive.Id);
             }
             else if (deleteItem is Models.File file)
             {
